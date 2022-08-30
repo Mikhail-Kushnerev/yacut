@@ -1,7 +1,6 @@
 from flask import flash, render_template, redirect, url_for, abort
 
 from . import app, db
-from .error_handlers import InvalidAPIUsage
 from .forms import ShortURLForm
 from .models import URL_map
 from .utils import get_unique_short_id, check_original

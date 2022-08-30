@@ -1,12 +1,7 @@
 import random
-from string import ascii_lowercase, ascii_uppercase, digits
 
-from flask import abort
-
+from .constants import STRING
 from .models import URL_map
-
-
-STRING: str = "".join((ascii_uppercase, ascii_lowercase, digits))
 
 
 def get_unique_short_id() -> str:

@@ -14,7 +14,10 @@ class ShortURLForm(FlaskForm):
     custom_id: StringField = StringField(
         validators=(
             Length(1, 16),
-            Regexp(regex=r"[A-Za-z0-9]+", message="В сокращенние присутствуют недопустимые символы"),
+            Regexp(
+                regex=r"[A-Za-z0-9]+",
+                message="В сокращенние присутствуют недопустимые символы"
+            ),
             Optional()
         )
     )
