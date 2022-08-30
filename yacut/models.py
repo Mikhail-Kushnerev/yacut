@@ -11,8 +11,8 @@ class URL_map(db.Model):
     short: str = db.Column(db.String(16))
     timestamp: datetime = db.Column(db.DateTime, default=datetime.utcnow())
 
-    def to_dict(self) -> dict[str, str]:
-        value: dict[str, str] = dict(
+    def to_dict(self):
+        value = dict(
             url=self.original,
             short_link=url_for(
                 "short_url", short=self.short, _external=True
