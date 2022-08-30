@@ -4,18 +4,22 @@ from datetime import datetime
 
 from yacut import db
 
-# video1video2video3video4video5
-class URL_map(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    original = db.Column(db.String(256), nullable=False)
-    short = db.Column(db.String(16))
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow())
 
-    def to_dict(self):
-        value = dict(
+class URL_map(db.Model):
+    id: int = db.Column(db.Integer, primary_key=True)
+    original: str = db.Column(db.String(256), nullable=False)
+    short: str = db.Column(db.String(16))
+    timestamp: datetime = db.Column(db.DateTime, default=datetime.utcnow())
+
+    def to_dict(self) -> dict[str, str]:
+        value: dict[str, str] = dict(
             url=self.original,
             short_link=url_for(
                 "short_url", short=self.short, _external=True
             )
         )
         return value
+
+    def from_dict(self, data: dict[str, str]) -> None:
+        for key, value in zip(("original", "short"), ("url", "custom_id")):
+            setattr(self, key, data[value])
