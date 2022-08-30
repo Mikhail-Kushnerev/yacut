@@ -20,6 +20,6 @@ class URL_map(db.Model):
         )
         return value
 
-    def from_dict(self, data: dict[str, str]) -> None:
+    def from_dict(self, data):
         for key, value in zip(("original", "short"), ("url", "custom_id")):
             setattr(self, key, data[value])
