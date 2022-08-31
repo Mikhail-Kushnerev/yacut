@@ -1,0 +1,2 @@
+class NotFoundID(Exception):
+    pass

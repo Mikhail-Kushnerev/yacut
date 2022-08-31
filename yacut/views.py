@@ -1,4 +1,4 @@
-from flask import flash, render_template, redirect, url_for, abort
+from flask import flash, render_template, redirect, url_for
 
 from . import app, db
 from .forms import ShortURLForm
@@ -7,11 +7,11 @@ from .utils import get_unique_short_id, check_original
 
 
 @app.route('/', methods=("GET", "POST"))
-def my_index_view():
+def generate_url_page():
     form: ShortURLForm = ShortURLForm()
     if form.validate_on_submit():
         url: str = form.custom_id.data
-        if not url or len(url) == 0:
+        if not url or len(url) == 0 or url is None:
             url: str = get_unique_short_id()
         if check_original(url):
             flash(f"Имя {url} уже занято!", "fail")
@@ -28,11 +28,4 @@ def my_index_view():
 
 @app.route('/<string:short>', methods=("GET",))
 def short_url(short):
-    try:
-        target = check_original(short)
-        if not target:
-            raise Exception
-    except Exception:
-        abort(404)
-    else:
-        return redirect(target)
+    return redirect(URL_map.query.filter_by(short=short).first_or_404().original)

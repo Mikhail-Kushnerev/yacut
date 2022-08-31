@@ -1,8 +1,11 @@
+import logging
+
 from flask import jsonify, request
 
 from . import app, db
-from .constants import match
+from .constants import MATCH
 from .error_handlers import InvalidAPIUsage
+from .exceptions import NotFoundID
 from .models import URL_map
 from .utils import get_unique_short_id, check_original
 
@@ -12,8 +15,9 @@ def get_link(short_id):
     try:
         target = check_original(short_id)
         if not target:
-            raise Exception
-    except Exception:
+            raise NotFoundID
+    except NotFoundID:
+        logging.error("Указан не существующий id")
         raise InvalidAPIUsage('Указанный id не найден', 404)
     else:
         return jsonify({"url": target}), 200
@@ -31,7 +35,7 @@ def push_link():
     elif not data.get("custom_id"):
         data.update({"custom_id": get_unique_short_id()})
 
-    elif not match.search(data["custom_id"]):
+    elif not MATCH.search(data["custom_id"]):
         raise InvalidAPIUsage('Указано недопустимое имя для короткой ссылки')
 
     elif check_original(data["custom_id"]):
