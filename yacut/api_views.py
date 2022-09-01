@@ -1,26 +1,18 @@
-import logging
-
 from flask import jsonify, request
 
 from . import app, db
 from .constants import MATCH
 from .error_handlers import InvalidAPIUsage
-from .exceptions import NotFoundID
 from .models import URL_map
 from .utils import get_unique_short_id, check_original
 
 
 @app.route("/api/id/<string:short_id>/", methods=("GET",))
 def get_link(short_id):
-    try:
-        target = check_original(short_id)
-        if not target:
-            raise NotFoundID
-    except NotFoundID:
-        logging.error("Указан не существующий id")
+    target: str = check_original(short_id)
+    if not target:
         raise InvalidAPIUsage('Указанный id не найден', 404)
-    else:
-        return jsonify({"url": target}), 200
+    return jsonify({"url": target}), 200
 
 
 @app.route("/api/id/", methods=("POST",))
