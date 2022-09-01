@@ -28,4 +28,6 @@ def generate_url_page():
 
 @app.route('/<string:short>', methods=("GET",))
 def short_url(short):
-    return redirect(URL_map.query.filter_by(short=short).first_or_404().original)
+    return redirect(
+        URL_map.query.filter_by(short=short).first_or_404().original
+    )
